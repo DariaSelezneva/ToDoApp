@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct ToDoAppApp: App {
+    
+    let appState: AppState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ToDoView(interactor: TodoInteractor(appState: appState))
+                .environmentObject(appState)
         }
     }
 }
