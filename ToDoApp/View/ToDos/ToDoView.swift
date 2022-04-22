@@ -70,13 +70,18 @@ struct ToDoView: View {
             }
             .padding(.horizontal, 20)
             List {
-                ForEach(appState.todos) { todo in
+                ForEach(Array(zip(appState.todos.indices, appState.todos)), id: \.0) { index, todo in
                     ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, onTapChecked: {
                         interactor.toggleToDo(todoID: todo.id)
                     }, onTapSave: { text in
                         interactor.saveToDo(todoID: todo.id, text: text)
                         editingTodoID = nil
                     })
+                    .onAppear {
+                        if index == appState.todos.count - 1 {
+                            interactor.loadMore()
+                        }
+                    }
                     .swipeActions {
                         if editingTodoID == nil {
                             Button(role: .destructive) {
@@ -93,9 +98,6 @@ struct ToDoView: View {
                         }
                     }
                 }
-            }
-            .onAppear {
-                interactor.loadMore()
             }
             .alert(isPresented: $isShowingDeletionWarning) {
                 Alert.taskDeletion {
