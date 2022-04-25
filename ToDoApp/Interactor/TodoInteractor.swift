@@ -77,7 +77,7 @@ class TodoInteractor {
                     self.appState.completed = completed
                 }
                 else if let error = error {
-                    self.appState.error = error
+                    self.appState.error = error.localizedDescription
                 }
             }
         }
@@ -103,7 +103,7 @@ class TodoInteractor {
                         self.appState.todos.append(contentsOf: todos)
                     }
                     else if let error = error {
-                        self.appState.error = error
+                        self.appState.error = error.localizedDescription
                     }
                 }
             }
@@ -123,7 +123,7 @@ class TodoInteractor {
                         self.appState.add(todo: todo)
                     }
                     else if let error = error {
-                        self.appState.error = error
+                        self.appState.error = error.localizedDescription
                     }
                 }
             }
@@ -135,7 +135,7 @@ class TodoInteractor {
                         self.appState.updateToDo(with: todoID, text: text)
                     }
                     else if let error = error {
-                        self.appState.error = error
+                        self.appState.error = error.localizedDescription
                     }
                 }
             }
@@ -151,7 +151,7 @@ class TodoInteractor {
                     self.appState.toggleToDo(id: todoID, setReady: setReady)
                 }
                 else if let error = error {
-                    self.appState.error = error
+                    self.appState.error = error.localizedDescription
                 }
             }
         }
@@ -164,7 +164,7 @@ class TodoInteractor {
                     self.appState.setStatusToAll(setReady: setReady)
                 }
                 else if let error = error {
-                    self.appState.error = error
+                    self.appState.error = error.localizedDescription
                 }
             }
         }
@@ -177,7 +177,7 @@ class TodoInteractor {
                     self.appState.deleteToDo(with: todoID)
                 }
                 else if let error = error {
-                    self.appState.error = error
+                    self.appState.error = error.localizedDescription
                 }
             }
         }
@@ -190,7 +190,7 @@ class TodoInteractor {
                     self.appState.deleteAllReady()
                 }
                 else if let error = error {
-                    self.appState.error = error
+                    self.appState.error = error.localizedDescription
                 }
             }
         }

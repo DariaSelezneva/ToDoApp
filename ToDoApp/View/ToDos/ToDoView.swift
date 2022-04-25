@@ -75,6 +75,9 @@ struct ToDoView: View {
                 }
             }
         }
+        .alert(item: $appState.error) { error in
+            Alert(title: Text(error))
+        }
     }
 }
 

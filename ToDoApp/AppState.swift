@@ -13,7 +13,7 @@ class AppState : ObservableObject {
     @Published var active : Int = 0
     @Published var completed : Int = 0
     
-    @Published var error: Error? = nil
+    @Published var error: String? = nil
     
     var isMore : Bool { active + completed > todos.count }
     
