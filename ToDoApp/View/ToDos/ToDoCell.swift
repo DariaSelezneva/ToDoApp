@@ -18,35 +18,46 @@ struct ToDoCell: View {
     
     let onTapChecked: () -> ()
     let onTapSave: (String) -> ()
+    let onTapCancel: () -> ()
     
-    init(todo: Todo, isEditing: Bool, onTapChecked: @escaping () -> (), onTapSave: @escaping (String) -> ()) {
+    init(todo: Todo, isEditing: Bool, onTapChecked: @escaping () -> (), onTapSave: @escaping (String) -> (), onTapCancel: @escaping () -> ()) {
         self.todo = todo
         self.isEditing = isEditing
-        self._changedText = State(wrappedValue: todo.title)
+        self.changedText = todo.text
         self.onTapChecked = onTapChecked
         self.onTapSave = onTapSave
+        self.onTapCancel = onTapCancel
     }
     
     var body: some View {
-        HStack {
-            if isEditing {
-                TextField("Enter todo", text: $changedText)
+        if isEditing {
+            VStack {
+                TextField("Enter todo", text: $changedText, onCommit: {
+                    validateAndSave()
+                })
                     .frame(height: 50)
-                    .padding(.leading)
+                    .padding(.horizontal)
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color.appLightGray))
-                Spacer()
-                Button("Save") {
-                    let text = changedText.withoutExtraSpaces()
-                    guard !text.isEmpty, text.count > 3, text.count < 160 else {
-                        showsValidationWarning = true
-                        return
+                HStack {
+                    Button("Cancel") {
+                        changedText = todo.text
+                        onTapCancel()
                     }
-                    onTapSave(changedText)
+                    .frame(maxWidth: .infinity)
+                    .buttonStyle(.borderless)
+                    Button("Save") {
+                        validateAndSave()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .buttonStyle(.borderedProminent)
+                    .alert("Invalid input", isPresented: $showsValidationWarning) {}
                 }
-                .alert("Can't save an empty todo", isPresented: $showsValidationWarning) {}
+                .padding(.all, 5)
             }
-            else {
-                Text(todo.title)
+        }
+        else {
+            HStack {
+                Text(todo.text)
                 Spacer()
                 Button {
                     onTapChecked()
@@ -54,17 +65,26 @@ struct ToDoCell: View {
                     let name = todo.isReady ? "checkmark.circle" : "circle"
                     Image(systemName: name)
                         .font(.system(size: 32))
+                        .padding(.vertical)
                 }
-                .frame(width: 50, height: 50)
             }
         }
-        .frame(height: 78)
+    }
+    
+    func validateAndSave() {
+        let text = changedText.withoutExtraSpaces()
+        changedText = text
+        guard !text.isEmpty, text.count > 3, text.count < 160 else {
+            showsValidationWarning = true
+            return
+        }
+        onTapSave(text)
     }
 }
 
 struct ToDoCell_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoCell(todo: Todo.sample[0], isEditing: true, onTapChecked: {}, onTapSave: {_ in })
+        ToDoCell(todo: Todo.sample[0], isEditing: true, onTapChecked: {}, onTapSave: {_ in }, onTapCancel: {})
             .previewLayout(.sizeThatFits)
     }
 }

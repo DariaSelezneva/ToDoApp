@@ -14,7 +14,8 @@ struct ToDoView: View {
     
     @State var editingTodoID: Int?
     
-    @State var isShowingDeletionWarning : Bool = false
+    @State var isShowingSingleDeletionWarning : Bool = false
+    @State var isShowingAllReadyDeletionWarning : Bool = false
     @State var todoIDtoDelete : Int?
     
     var body: some View {
@@ -39,23 +40,28 @@ struct ToDoView: View {
                 Spacer()
                 Menu {
                     Button("Mark all as completed") {
-                        interactor.setAllCompleted()
+                        interactor.setStatusToAll(setReady: true)
                     }
                     Button("Mark all as active") {
-                        interactor.setAllActive()
+                        interactor.setStatusToAll(setReady: false)
                     }
                     Button("Delete all completed") {
-                        interactor.deleteAllCompleted()
+                        isShowingAllReadyDeletionWarning = true
                     }
                 } label: {
                     Image(systemName: "ellipsis")
                         .font(.system(size: 32))
                 }
                 .frame(width: 50, height: 50)
+                .alert(isPresented: $isShowingAllReadyDeletionWarning) {
+                    Alert.taskDeletion(title: "Do you want to delete all completed tasks?") {
+                        interactor.deleteAllReady()
+                    }
+                }
                 Button {
-                    let todo = Todo(id: -1, title: "", isReady: false)
-                    interactor.appState.todos.append(todo)
+                    let todo = Todo(id: -1, text: "", isReady: false)
                     editingTodoID = -1
+                    appState.todos.append(todo)
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 32))
@@ -69,38 +75,47 @@ struct ToDoView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            List {
-                ForEach(Array(zip(appState.todos.indices, appState.todos)), id: \.0) { index, todo in
-                    ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, onTapChecked: {
-                        interactor.toggleToDo(todoID: todo.id)
-                    }, onTapSave: { text in
-                        interactor.saveToDo(todoID: todo.id, text: text)
-                        editingTodoID = nil
-                    })
-                    .onAppear {
-                        if index == appState.todos.count - 1 {
-                            interactor.loadMore()
-                        }
-                    }
-                    .swipeActions {
-                        if editingTodoID == nil {
-                            Button(role: .destructive) {
-                                todoIDtoDelete = todo.id
-                                isShowingDeletionWarning = true
-                            } label: {
-                                Image(systemName: "trash")
+            ScrollViewReader { proxy in
+                List {
+                    ForEach(Array(zip(appState.todos.indices, appState.todos)), id: \.0) { index, todo in
+                        ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, onTapChecked: {
+                            interactor.toggleToDo(todoID: todo.id)
+                        }, onTapSave: { text in
+                            interactor.saveToDo(todoID: todo.id, text: text)
+                            editingTodoID = nil
+                        }, onTapCancel: {
+                            editingTodoID = nil
+                        })
+                        .onAppear {
+                            if index == appState.todos.count - 1 {
+                                interactor.loadMore()
                             }
-                            Button {
-                                editingTodoID = todo.id
-                            } label : {
-                                Image(systemName: "pencil")
+                        }
+                        .swipeActions {
+                            if editingTodoID == nil {
+                                Button(role: .destructive) {
+                                    todoIDtoDelete = todo.id
+                                    isShowingSingleDeletionWarning = true
+                                } label: {
+                                    Image(systemName: "trash")
+                                }
+                                Button {
+                                    editingTodoID = todo.id
+                                } label : {
+                                    Image(systemName: "pencil")
+                                }
+                            }
+                        }
+                        .onChange(of: editingTodoID) { value in
+                            if value == -1 {
+                                proxy.scrollTo(appState.todos.count - 1)
                             }
                         }
                     }
                 }
             }
-            .alert(isPresented: $isShowingDeletionWarning) {
-                Alert.taskDeletion {
+            .alert(isPresented: $isShowingSingleDeletionWarning) {
+                Alert.taskDeletion(title: "Do you want to delete this ToDo?") {
                     guard let id = todoIDtoDelete else { return }
                     interactor.deleteToDo(todoID: id)
                 }

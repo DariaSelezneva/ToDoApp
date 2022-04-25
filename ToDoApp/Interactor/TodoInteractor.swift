@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import Combine
 
 class TodoInteractor {
     
     let repository: TodoRepository = TodoRepository()
+    
+    var cancellables: [AnyCancellable] = []
     
     enum Filter {
         case all
@@ -82,7 +85,6 @@ class TodoInteractor {
     
     func loadMore() {
         if appState.isMore {
-            print("gets called")
             page += 1
             guard selectedFilter != .nothing else {
                 appState.todos = []
@@ -95,7 +97,7 @@ class TodoInteractor {
             case .completed: status = true
             case .nothing: break
             }
-            repository.getTodos(page: page, perPage: perPage, status: status) { todos, _, _, error in
+            repository.getTodos(page: page, perPage: perPage, status: status) { [unowned self] todos, _, _, error in
                 DispatchQueue.main.async {
                     if let todos = todos {
                         self.appState.todos.append(contentsOf: todos)
@@ -114,38 +116,92 @@ class TodoInteractor {
     }
     
     func saveToDo(todoID: Int, text: String) {
-        print("saving todo \(text)")
+        if todoID == -1 {
+            repository.createToDo(text: text) { [unowned self] todo, error in
+                DispatchQueue.main.async {
+                    if let todo = todo, error == nil {
+                        self.appState.add(todo: todo)
+                    }
+                    else if let error = error {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
+        else {
+            repository.saveToDo(todoID: todoID, text: text) { [unowned self] success, error in
+                DispatchQueue.main.async {
+                    if success, error == nil {
+                        self.appState.updateToDo(with: todoID, text: text)
+                    }
+                    else if let error = error {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
     }
     
     func toggleToDo(todoID: Int) {
         guard let todo = appState.todos.first(where: {$0.id == todoID}) else { return }
-        let isReady = todo.isReady
-        var request = URLRequest(url: AppURL.patchTodoStatusURL(id: todoID))
-        request.httpMethod = "PATCH"
-        let jsonDict = ["status" : isReady]
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: []) else { return }
-        request.httpBody = jsonData
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data, let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any] {
-                print(jsonDict)
+        let setReady = !todo.isReady
+//        guard let publisher = repository.toggleToDoPublisher(todoID: todoID, setReady: setReady) else { return }
+//        publisher.sink(receiveCompletion: { completion in
+//            if case .failure(let error) = completion { self.appState.error = error }
+//        }) { success in
+//            if success {
+//                self.appState.toggleToDo(id: todoID, setReady: setReady)
+//            }
+//        }
+//        .store(in: &cancellables)
+                repository.toggleToDo(todoID: todoID, setReady: setReady) { [unowned self] success, error in
+                    DispatchQueue.main.async {
+                        if success, error == nil {
+                            self.appState.toggleToDo(id: todoID, setReady: setReady)
+                        }
+                        else if let error = error {
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+    }
+    
+    func setStatusToAll(setReady: Bool) {
+        repository.setStatusToAll(setReady: setReady) { [unowned self] success, error in
+            DispatchQueue.main.async {
+                if success, error == nil {
+                    self.appState.setStatusToAll(setReady: setReady)
+                }
+                else if let error = error {
+                    self.appState.error = error
+                }
             }
         }
-        session.resume()
-    }
-    
-    func setAllActive() {
-        
-    }
-    
-    func setAllCompleted() {
-        
     }
     
     func deleteToDo(todoID: Int) {
-        print("deletingToDo with id \(todoID)")
+        repository.deleteToDo(todoID: todoID) { [unowned self] success, error in
+            DispatchQueue.main.async {
+                if success, error == nil {
+                    self.appState.deleteToDo(with: todoID)
+                }
+                else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
     
-    func deleteAllCompleted() {
-        
+    func deleteAllReady() {
+        repository.deleteAllReady { [unowned self] success, error in
+            DispatchQueue.main.async {
+                if success, error == nil {
+                    self.appState.deleteAllReady()
+                }
+                else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
 }

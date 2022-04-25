@@ -10,10 +10,10 @@ import Foundation
 struct Todo : Identifiable {
     
     var id: Int
-    var title: String
+    var text: String
     var isReady: Bool
     
-    static let sample = [Todo(id: 0, title: "Some todo", isReady: false), Todo(id: 1, title: "Another todo", isReady: true)]
+    static let sample = [Todo(id: 0, text: "Some todo", isReady: false), Todo(id: 1, text: "Another todo", isReady: true)]
 }
 
 extension Todo {
@@ -22,13 +22,17 @@ extension Todo {
               let title = dict["text"] as? String,
               let isReady = dict["status"] as? Bool else { return nil }
         self.id = id
-        self.title = title
+        self.text = title
         self.isReady = isReady
     }
 }
 
-extension Todo: Comparable {
+extension Todo : Comparable {
     static func < (lhs: Todo, rhs: Todo) -> Bool {
         return lhs.id < rhs.id
     }
+}
+
+extension Todo : Codable {
+    
 }

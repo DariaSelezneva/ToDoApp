@@ -10,11 +10,11 @@ import SwiftUI
 
 extension Alert {
     
-    static func taskDeletion(_ handler: @escaping () -> Void) -> Alert {
+    static func taskDeletion(title: String, handler: @escaping () -> Void) -> Alert {
         return Alert(
-            title: Text("Do you want to delete this ToDo?"),
+            title: Text(title),
             message: Text(""),
-            primaryButton: .destructive(Text("Delete"), action: handler),
-            secondaryButton: .default(Text("Cancel"), action: {}))
+            primaryButton: .default(Text("Cancel"), action: {}),
+            secondaryButton: .destructive(Text("Delete"), action: handler))
     }
 }

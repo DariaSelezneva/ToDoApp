@@ -14,6 +14,9 @@ extension String {
         while string.contains("  ") {
             string = string.replacingOccurrences(of: "  ", with: " ")
         }
+        while string.last == " " {
+            string.removeLast()
+        }
         return string
     }
 }
