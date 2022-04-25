@@ -45,17 +45,6 @@ class TodoRepository {
         session.resume()
     }
     
-//    func toggleToDoPublisher(todoID: Int, setReady: Bool) -> AnyPublisher<Bool, Error>? {
-//        guard let request = API.toggleToDoRequest(todoID: todoID, setReady: setReady) else { return nil }
-//        return URLSession.shared.dataTaskPublisher(for: request)
-//            .receive(on: DispatchQueue.main)
-//            .mapError { $0 as Error }
-//            .compactMap { try? JSONSerialization.jsonObject(with: $0.data, options: []) as? [String : Any] }
-//            .print()
-//            .compactMap { $0["success"] as? Bool }
-//            .eraseToAnyPublisher()
-//    }
-    
     func createToDo(text: String, completion: @escaping (_ todo: Todo?, _ error: Error?) -> Void) {
         guard let request = API.createToDoRequest(text: text) else { return }
         let session = URLSession.shared.dataTask(with: request) { data, response, error in

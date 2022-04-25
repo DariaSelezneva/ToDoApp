@@ -77,7 +77,7 @@ class TodoInteractor {
                     self.appState.completed = completed
                 }
                 else if let error = error {
-                    print(error.localizedDescription)
+                    self.appState.error = error
                 }
             }
         }
@@ -103,7 +103,7 @@ class TodoInteractor {
                         self.appState.todos.append(contentsOf: todos)
                     }
                     else if let error = error {
-                        print(error.localizedDescription)
+                        self.appState.error = error
                     }
                 }
             }
@@ -123,7 +123,7 @@ class TodoInteractor {
                         self.appState.add(todo: todo)
                     }
                     else if let error = error {
-                        print(error.localizedDescription)
+                        self.appState.error = error
                     }
                 }
             }
@@ -135,7 +135,7 @@ class TodoInteractor {
                         self.appState.updateToDo(with: todoID, text: text)
                     }
                     else if let error = error {
-                        print(error.localizedDescription)
+                        self.appState.error = error
                     }
                 }
             }
@@ -145,25 +145,16 @@ class TodoInteractor {
     func toggleToDo(todoID: Int) {
         guard let todo = appState.todos.first(where: {$0.id == todoID}) else { return }
         let setReady = !todo.isReady
-//        guard let publisher = repository.toggleToDoPublisher(todoID: todoID, setReady: setReady) else { return }
-//        publisher.sink(receiveCompletion: { completion in
-//            if case .failure(let error) = completion { self.appState.error = error }
-//        }) { success in
-//            if success {
-//                self.appState.toggleToDo(id: todoID, setReady: setReady)
-//            }
-//        }
-//        .store(in: &cancellables)
-                repository.toggleToDo(todoID: todoID, setReady: setReady) { [unowned self] success, error in
-                    DispatchQueue.main.async {
-                        if success, error == nil {
-                            self.appState.toggleToDo(id: todoID, setReady: setReady)
-                        }
-                        else if let error = error {
-                            print(error.localizedDescription)
-                        }
-                    }
+        repository.toggleToDo(todoID: todoID, setReady: setReady) { [unowned self] success, error in
+            DispatchQueue.main.async {
+                if success, error == nil {
+                    self.appState.toggleToDo(id: todoID, setReady: setReady)
                 }
+                else if let error = error {
+                    self.appState.error = error
+                }
+            }
+        }
     }
     
     func setStatusToAll(setReady: Bool) {
@@ -186,7 +177,7 @@ class TodoInteractor {
                     self.appState.deleteToDo(with: todoID)
                 }
                 else if let error = error {
-                    print(error.localizedDescription)
+                    self.appState.error = error
                 }
             }
         }
@@ -199,7 +190,7 @@ class TodoInteractor {
                     self.appState.deleteAllReady()
                 }
                 else if let error = error {
-                    print(error.localizedDescription)
+                    self.appState.error = error
                 }
             }
         }

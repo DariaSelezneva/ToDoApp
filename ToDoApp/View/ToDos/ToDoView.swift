@@ -15,61 +15,15 @@ struct ToDoView: View {
     @State var editingTodoID: Int?
     
     @State var isShowingSingleDeletionWarning : Bool = false
-    @State var isShowingAllReadyDeletionWarning : Bool = false
     @State var todoIDtoDelete : Int?
     
     var body: some View {
         VStack {
-            HStack {
-                Menu {
-                    Button {
-                        interactor.showsActive.toggle()
-                    } label: {
-                        Label("Active", systemImage: interactor.showsActive ? "checkmark" : "")
-                    }
-                    Button {
-                        interactor.showsCompleted.toggle()
-                    } label: {
-                        Label("Completed", systemImage: interactor.showsCompleted ? "checkmark" : "")
-                    }
-                } label: {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
-                        .font(.system(size: 32))
-                }
-                .frame(width: 50, height: 50)
-                Spacer()
-                Menu {
-                    Button("Mark all as completed") {
-                        interactor.setStatusToAll(setReady: true)
-                    }
-                    Button("Mark all as active") {
-                        interactor.setStatusToAll(setReady: false)
-                    }
-                    Button("Delete all completed") {
-                        isShowingAllReadyDeletionWarning = true
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 32))
-                }
-                .frame(width: 50, height: 50)
-                .alert(isPresented: $isShowingAllReadyDeletionWarning) {
-                    Alert.taskDeletion(title: "Do you want to delete all completed tasks?") {
-                        interactor.deleteAllReady()
-                    }
-                }
-                Button {
-                    let todo = Todo(id: -1, text: "", isReady: false)
-                    editingTodoID = -1
-                    appState.todos.append(todo)
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 32))
-                }
-                .frame(width: 50, height: 50)
-                
-            }
-            .padding()
+            ToDoViewHeader(interactor: interactor, onTapAdd: {
+                let todo = Todo(id: -1, text: "", isReady: false)
+                editingTodoID = -1
+                appState.todos.append(todo)
+            })
             HStack {
                 Text("Active: \(appState.active), completed: \(appState.completed)")
                 Spacer()
