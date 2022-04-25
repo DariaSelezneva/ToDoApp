@@ -117,82 +117,52 @@ class TodoInteractor {
     
     func saveToDo(todoID: Int, text: String) {
         if todoID == -1 {
-            repository.createToDo(text: text) { [unowned self] todo, error in
-                DispatchQueue.main.async {
-                    if let todo = todo, error == nil {
-                        self.appState.add(todo: todo)
-                    }
-                    else if let error = error {
-                        self.appState.error = error.localizedDescription
-                    }
-                }
-            }
+            repository.createToDo(text: text, onSuccess: { [unowned self] todo in
+                self.appState.add(todo: todo)
+            }, onError: { [unowned self] error in
+                self.appState.error = error.localizedDescription
+            })
         }
         else {
-            repository.saveToDo(todoID: todoID, text: text) { [unowned self] success, error in
-                DispatchQueue.main.async {
-                    if success, error == nil {
-                        self.appState.updateToDo(with: todoID, text: text)
-                    }
-                    else if let error = error {
-                        self.appState.error = error.localizedDescription
-                    }
-                }
-            }
+            repository.saveToDo(todoID: todoID, text: text, onSuccess: { [unowned self] in
+                self.appState.updateToDo(with: todoID, text: text)
+            }, onError: { [unowned self] error in
+                self.appState.error = error.localizedDescription
+            })
         }
     }
     
     func toggleToDo(todoID: Int) {
         guard let todo = appState.todos.first(where: {$0.id == todoID}) else { return }
         let setReady = !todo.isReady
-        repository.toggleToDo(todoID: todoID, setReady: setReady) { [unowned self] success, error in
-            DispatchQueue.main.async {
-                if success, error == nil {
-                    self.appState.toggleToDo(id: todoID, setReady: setReady)
-                }
-                else if let error = error {
-                    self.appState.error = error.localizedDescription
-                }
-            }
-        }
+        repository.toggleToDo(todoID: todoID, setReady: setReady, onSuccess: { [unowned self] in
+            self.appState.toggleToDo(id: todoID, setReady: setReady)
+        }, onError: { [unowned self] error in
+            self.appState.error = error.localizedDescription
+        })
     }
     
     func setStatusToAll(setReady: Bool) {
-        repository.setStatusToAll(setReady: setReady) { [unowned self] success, error in
-            DispatchQueue.main.async {
-                if success, error == nil {
-                    self.appState.setStatusToAll(setReady: setReady)
-                }
-                else if let error = error {
-                    self.appState.error = error.localizedDescription
-                }
-            }
-        }
+        repository.setStatusToAll(setReady: setReady, onSuccess: { [unowned self] in
+            self.appState.setStatusToAll(setReady: setReady)
+        }, onError: { [unowned self] error in
+            self.appState.error = error.localizedDescription
+        })
     }
     
     func deleteToDo(todoID: Int) {
-        repository.deleteToDo(todoID: todoID) { [unowned self] success, error in
-            DispatchQueue.main.async {
-                if success, error == nil {
-                    self.appState.deleteToDo(with: todoID)
-                }
-                else if let error = error {
-                    self.appState.error = error.localizedDescription
-                }
-            }
-        }
+        repository.deleteToDo(todoID: todoID, onSuccess: { [unowned self] in
+            self.appState.deleteToDo(with: todoID)
+        }, onError: { [unowned self] error in
+            self.appState.error = error.localizedDescription
+        })
     }
     
     func deleteAllReady() {
-        repository.deleteAllReady { [unowned self] success, error in
-            DispatchQueue.main.async {
-                if success, error == nil {
-                    self.appState.deleteAllReady()
-                }
-                else if let error = error {
-                    self.appState.error = error.localizedDescription
-                }
-            }
-        }
+        repository.deleteAllReady(onSuccess: { [unowned self] in
+            self.appState.deleteAllReady()
+        }, onError: { [unowned self] error in
+            self.appState.error = error.localizedDescription
+        })
     }
 }

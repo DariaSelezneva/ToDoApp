@@ -10,6 +10,23 @@ import Combine
 
 class TodoRepository {
     
+    private func startURLSession(request: URLRequest, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
+        let session = URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                if let data = data,
+                   let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
+                   let success = jsonDict["success"] as? Bool,
+                   success == true {
+                    onSuccess()
+                }
+                else if let error = error {
+                    onError(error)
+                }
+            }
+        }
+        session.resume()
+    }
+    
     func getTodos(page: Int, perPage: Int, status: Bool?, completion: @escaping (_ todos: [Todo]?, _ active: Int?, _ completed: Int?, _ error: Error?) -> Void) {
         let request = API.getTodosRequest(page: page, perPage: perPage, status: status)
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -29,95 +46,45 @@ class TodoRepository {
         session.resume()
     }
     
-    func toggleToDo(todoID: Int, setReady: Bool, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    func toggleToDo(todoID: Int, setReady: Bool, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
         guard let request = API.toggleToDoRequest(todoID: todoID, setReady: setReady) else { return }
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let success = jsonDict["success"] as? Bool {
-                completion(success, nil)
-            }
-            else if let error = error {
-                print(error)
-                completion(false, error)
-            }
-        }
-        session.resume()
+        startURLSession(request: request, onSuccess: onSuccess, onError: onError)
     }
     
-    func createToDo(text: String, completion: @escaping (_ todo: Todo?, _ error: Error?) -> Void) {
+    
+    func createToDo(text: String, onSuccess: @escaping (Todo) -> (), onError: @escaping (Error) -> ()) {
         guard let request = API.createToDoRequest(text: text) else { return }
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data,
                let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
                let todoData = jsonDict["data"] as? [String : Any],
-            let todo = Todo(from: todoData) {
-                completion(todo, nil)
+               let todo = Todo(from: todoData) {
+                onSuccess(todo)
             }
             else if let error = error {
-                completion(nil, error)
+                onError(error)
             }
         }
         session.resume()
     }
     
-    func saveToDo(todoID: Int, text: String, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    func saveToDo(todoID: Int, text: String, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
         guard let request = API.saveToDoRequest(todoID: todoID, text: text) else { return }
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let success = jsonDict["success"] as? Bool {
-                completion(success, nil)
-            }
-            else if let error = error {
-                completion(false, error)
-            }
-        }
-        session.resume()
+        startURLSession(request: request, onSuccess: onSuccess, onError: onError)
     }
     
-    func deleteToDo(todoID: Int, completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    func deleteToDo(todoID: Int, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
         let request = API.deleteToDoRequest(todoID: todoID)
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let success = jsonDict["success"] as? Bool {
-                completion(success, nil)
-            }
-            else if let error = error {
-                completion(false, error)
-            }
-        }
-        session.resume()
+        startURLSession(request: request, onSuccess: onSuccess, onError: onError)
     }
     
-    func setStatusToAll(setReady: Bool, completion: @escaping (Bool, Error?) -> Void) {
+    func setStatusToAll(setReady: Bool, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
         guard let request = API.setStatusToAllRequest(setReady: setReady) else { return }
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let success = jsonDict["success"] as? Bool {
-                completion(success, nil)
-            }
-            else if let error = error {
-                completion(false, error)
-            }
-        }
-        session.resume()
+        startURLSession(request: request, onSuccess: onSuccess, onError: onError)
     }
     
-    func deleteAllReady(completion: @escaping (Bool, Error?) -> Void) {
+    func deleteAllReady(onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
         let request = API.deleteAllReadyRequest()
-        let session = URLSession.shared.dataTask(with: request) {data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let success = jsonDict["success"] as? Bool {
-                completion(success, nil)
-            }
-            else if let error = error {
-                completion(false, error)
-            }
-        }
-        session.resume()
+        startURLSession(request: request, onSuccess: onSuccess, onError: onError)
     }
 }
