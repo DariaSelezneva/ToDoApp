@@ -9,79 +9,84 @@ import SwiftUI
 
 struct ToDoView: View {
     
-    let interactor : TodoInteractor
-    @EnvironmentObject var appState: AppState
+    @ObservedObject var viewModel : ToDoViewModel = ToDoViewModel()
     
-    @State var editingTodoID: Int?
     
-    @State var todoIDtoDelete : Int?
+    @State private var editingTodoID: Int?
     
-    @State var isShowingSingleDeletionWarning : Bool = false
+    @State private var todoIDtoDelete : Int?
+    
+    @State private var isShowingSingleDeletionWarning : Bool = false
     
     var body: some View {
-        VStack {
-            ToDoViewHeader(interactor: interactor, onTapAdd: {
-                if editingTodoID == nil {
-                    let todo = Todo(id: -1, text: "", isReady: false)
-                    editingTodoID = -1
-                    appState.todos.append(todo)
+        ZStack {
+            VStack {
+                ToDoViewHeader(viewModel: viewModel, onTapAdd: {
+                    if editingTodoID == nil {
+                        let todo = Todo(id: -1, text: "", isReady: false)
+                        editingTodoID = -1
+                        viewModel.todos.append(todo)
+                    }
+                })
+                HStack {
+                    Text("Active: \(viewModel.active), completed: \(viewModel.completed)")
+                    Spacer()
                 }
-            })
-            HStack {
-                Text("Active: \(appState.active), completed: \(appState.completed)")
-                Spacer()
-            }
-            .alert(item: $appState.error) { error in
-                Alert(title: Text(error))
-            }
-            .padding(.horizontal, 20)
-            ScrollViewReader { proxy in
-                List {
-                    ForEach(Array(zip(appState.todos.indices, appState.todos)), id: \.0) { index, todo in
-                        ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, onTapChecked: {
-                            interactor.toggleToDo(todoID: todo.id)
-                        }, onTapSave: { text in
-                            interactor.saveToDo(todoID: todo.id, text: text)
-                            editingTodoID = nil
-                        }, onTapCancel: {
-                            if editingTodoID == -1 {
-                                appState.todos.removeLast()
-                            }
-                            editingTodoID = nil
-                        })
-                        .onAppear {
-                            if index == appState.todos.count - 1 {
-                                interactor.loadMore()
-                            }
-                        }
-                        .swipeActions {
-                            if editingTodoID == nil {
-                                Button(role: .destructive) {
-                                    todoIDtoDelete = todo.id
-                                    isShowingSingleDeletionWarning = true
-                                } label: {
-                                    Image(systemName: "trash")
+                .alert(item: $viewModel.error) { error in
+                    Alert(title: Text(error))
+                }
+                .padding(.horizontal, 20)
+                ScrollViewReader { proxy in
+                    List {
+                        ForEach(Array(zip(viewModel.todos.indices, viewModel.todos)), id: \.0) { index, todo in
+                            ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, onTapChecked: {
+                                viewModel.toggleToDo(todoID: todo.id)
+                            }, onTapSave: { text in
+                                viewModel.saveToDo(todoID: todo.id, text: text)
+                                editingTodoID = nil
+                            }, onTapCancel: {
+                                if editingTodoID == -1 {
+                                    viewModel.todos.removeLast()
                                 }
-                                Button {
-                                    editingTodoID = todo.id
-                                } label : {
-                                    Image(systemName: "pencil")
+                                editingTodoID = nil
+                            })
+                            .onAppear {
+                                if index == viewModel.todos.count - 1 && editingTodoID == nil {
+                                    viewModel.loadMore()
                                 }
                             }
-                        }
-                        .onChange(of: editingTodoID) { value in
-                            if value == -1 {
-                                proxy.scrollTo(appState.todos.count - 1)
+                            .swipeActions {
+                                if editingTodoID == nil {
+                                    Button(role: .destructive) {
+                                        todoIDtoDelete = todo.id
+                                        isShowingSingleDeletionWarning = true
+                                    } label: {
+                                        Image(systemName: "trash")
+                                    }
+                                    Button {
+                                        editingTodoID = todo.id
+                                    } label : {
+                                        Image(systemName: "pencil")
+                                    }
+                                }
+                            }
+                            .onChange(of: editingTodoID) { value in
+                                if value == -1 {
+                                    proxy.scrollTo(viewModel.todos.count - 1)
+                                }
                             }
                         }
                     }
                 }
-            }
-            .alert(isPresented: $isShowingSingleDeletionWarning) {
-                Alert.taskDeletion(title: "Do you want to delete this ToDo?") {
-                    guard let id = todoIDtoDelete else { return }
-                    interactor.deleteToDo(todoID: id)
+                .alert(isPresented: $isShowingSingleDeletionWarning) {
+                    Alert.taskDeletion(title: "Do you want to delete this ToDo?") {
+                        guard let id = todoIDtoDelete else { return }
+                        viewModel.deleteToDo(todoID: id)
+                    }
                 }
+            }
+            if viewModel.loadingState == .loading {
+                ProgressView()
             }
         }
     }
@@ -89,7 +94,6 @@ struct ToDoView: View {
 
 struct ToDoView_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoView(interactor: TodoInteractor(appState: AppState()))
-            .environmentObject(AppState())
+        ToDoView()
     }
 }

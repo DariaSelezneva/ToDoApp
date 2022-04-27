@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+protocol ToDoRepositoryLogic {
+    
+}
+
 class TodoRepository {
     
     private func startURLSession(request: URLRequest, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
@@ -27,21 +31,21 @@ class TodoRepository {
         session.resume()
     }
     
-    func getTodos(page: Int, perPage: Int, status: Bool?, completion: @escaping (_ todos: [Todo]?, _ active: Int?, _ completed: Int?, _ error: Error?) -> Void) {
+    func getTodos(page: Int, perPage: Int, status: Bool?, onSuccess: @escaping (ToDoGetResponse) -> (), onError: @escaping (Error) -> ()) {
         let request = API.getTodosRequest(page: page, perPage: perPage, status: status)
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
-                if let data = data,
-                   let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-                   let data = jsonDict["data"] as? [String : Any],
-                   let content = data["content"] as? [[String : Any]],
-                   let ready = data["ready"] as? Int,
-                   let notReady = data["notReady"] as? Int {
-                    let todos = content.compactMap({Todo.init(from: $0)}).sorted(by: <)
-                    completion(todos, notReady, ready, nil)
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    do {
+                        let response =  try decoder.decode(ToDoGetResponse.self, from: data)
+                        onSuccess(response)
+                    } catch {
+                        onError(error)
+                    }
                 }
                 else if let error = error {
-                    completion(nil, nil, nil, error)
+                    onError(error)
                 }
             }
         }
@@ -59,11 +63,14 @@ class TodoRepository {
         guard let request = API.createToDoRequest(text: text) else { return }
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
-                if let data = data,
-                   let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-                   let todoData = jsonDict["data"] as? [String : Any],
-                   let todo = Todo(from: todoData) {
-                    onSuccess(todo)
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    do {
+                        let createResponse = try decoder.decode(ToDoCreateResponse.self, from: data)
+                        onSuccess(createResponse.todo)
+                    } catch {
+                        onError(error)
+                    }
                 }
                 else if let error = error {
                     onError(error)

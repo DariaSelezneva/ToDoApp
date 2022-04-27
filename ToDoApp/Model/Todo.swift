@@ -33,6 +33,16 @@ extension Todo : Comparable {
     }
 }
 
-extension Todo : Codable {
+extension Todo : Decodable {
     
+    enum CodingKeys: String, CodingKey {
+        case id, text, status, createdAt, updatedAt
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        text = try container.decode(String.self, forKey: .text)
+        isReady = try container.decode(Bool.self, forKey: .status)
+    }
 }

@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ToDoViewHeader: View {
     
-    let interactor: TodoInteractor
+    let viewModel: ToDoViewModel
     
-    @State var isShowingAllReadyDeletionWarning : Bool = false
+    @State private var isShowingAllReadyDeletionWarning : Bool = false
     
     let onTapAdd: () -> ()
     
@@ -19,14 +19,14 @@ struct ToDoViewHeader: View {
         HStack {
             Menu {
                 Button {
-                    interactor.showsActive.toggle()
+                    viewModel.showsActive.toggle()
                 } label: {
-                    Label("Active", systemImage: interactor.showsActive ? "checkmark" : "")
+                    Label("Active", systemImage: viewModel.showsActive ? "checkmark" : "")
                 }
                 Button {
-                    interactor.showsCompleted.toggle()
+                    viewModel.showsCompleted.toggle()
                 } label: {
-                    Label("Completed", systemImage: interactor.showsCompleted ? "checkmark" : "")
+                    Label("Completed", systemImage: viewModel.showsCompleted ? "checkmark" : "")
                 }
             } label: {
                 Image(systemName: "line.3.horizontal.decrease.circle")
@@ -36,10 +36,10 @@ struct ToDoViewHeader: View {
             Spacer()
             Menu {
                 Button("Mark all as completed") {
-                    interactor.setStatusToAll(setReady: true)
+                    viewModel.setStatusToAll(setReady: true)
                 }
                 Button("Mark all as active") {
-                    interactor.setStatusToAll(setReady: false)
+                    viewModel.setStatusToAll(setReady: false)
                 }
                 Button("Delete all completed") {
                     isShowingAllReadyDeletionWarning = true
@@ -47,10 +47,11 @@ struct ToDoViewHeader: View {
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 32))
+                    .frame(width: 50, height: 50)
             }
             .alert(isPresented: $isShowingAllReadyDeletionWarning) {
                 Alert.taskDeletion(title: "Do you want to delete all completed tasks?") {
-                    interactor.deleteAllReady()
+                    viewModel.deleteAllReady()
                 }
             }
             .frame(width: 50, height: 50)
@@ -69,6 +70,6 @@ struct ToDoViewHeader: View {
 
 struct ToDoViewHeader_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoViewHeader(interactor: TodoInteractor(appState: AppState()), onTapAdd: {})
+        ToDoViewHeader(viewModel: ToDoViewModel(), onTapAdd: {})
     }
 }

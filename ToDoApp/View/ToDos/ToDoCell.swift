@@ -12,9 +12,9 @@ struct ToDoCell: View {
     let todo : Todo
     
     let isEditing: Bool
-    @State var changedText: String = ""
+    @State private var changedText: String = ""
     
-    @State var showsValidationWarning : Bool = false
+    @State private var showsValidationWarning : Bool = false
     
     let onTapChecked: () -> ()
     let onTapSave: (String) -> ()

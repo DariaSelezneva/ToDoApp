@@ -10,14 +10,15 @@
 		4364B79828128D5600B53400 /* e_String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364B79728128D5600B53400 /* e_String.swift */; };
 		4364B79E2812E85E00B53400 /* TodoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4364B79D2812E85E00B53400 /* TodoRepository.swift */; };
 		43650D0C2816D83E00A2CBAA /* ToDoViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43650D0B2816D83E00A2CBAA /* ToDoViewHeader.swift */; };
+		4382A58C28196FE500F18FC0 /* ToDoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382A58B28196FE500F18FC0 /* ToDoViewModel.swift */; };
+		4382A58E281970DA00F18FC0 /* ToDoGetResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382A58D281970DA00F18FC0 /* ToDoGetResponse.swift */; };
+		4382A5912819818600F18FC0 /* ToDoCreateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382A5902819818600F18FC0 /* ToDoCreateResponse.swift */; };
 		4391B02128112E51003165DB /* ToDoAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B02028112E51003165DB /* ToDoAppApp.swift */; };
 		4391B02528112E53003165DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4391B02428112E53003165DB /* Assets.xcassets */; };
 		4391B02828112E53003165DB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4391B02728112E53003165DB /* Preview Assets.xcassets */; };
 		4391B03128112F26003165DB /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B03028112F26003165DB /* Todo.swift */; };
 		4391B038281131B2003165DB /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B037281131B2003165DB /* API.swift */; };
-		4391B03A2811379C003165DB /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B0392811379C003165DB /* AppState.swift */; };
 		4391B04628118C91003165DB /* ToDoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B04528118C91003165DB /* ToDoView.swift */; };
-		4391B04828118DE7003165DB /* TodoInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B04728118DE7003165DB /* TodoInteractor.swift */; };
 		4391B04A28118FE6003165DB /* ToDoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B04928118FE6003165DB /* ToDoCell.swift */; };
 		4391B05028119B60003165DB /* e_Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B04F28119B60003165DB /* e_Alert.swift */; };
 		4391B0562811A46A003165DB /* e_Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391B0552811A46A003165DB /* e_Color.swift */; };
@@ -27,15 +28,16 @@
 		4364B79728128D5600B53400 /* e_String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = e_String.swift; sourceTree = "<group>"; };
 		4364B79D2812E85E00B53400 /* TodoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRepository.swift; sourceTree = "<group>"; };
 		43650D0B2816D83E00A2CBAA /* ToDoViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewHeader.swift; sourceTree = "<group>"; };
+		4382A58B28196FE500F18FC0 /* ToDoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModel.swift; sourceTree = "<group>"; };
+		4382A58D281970DA00F18FC0 /* ToDoGetResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoGetResponse.swift; sourceTree = "<group>"; };
+		4382A5902819818600F18FC0 /* ToDoCreateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCreateResponse.swift; sourceTree = "<group>"; };
 		4391B01D28112E51003165DB /* ToDoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4391B02028112E51003165DB /* ToDoAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoAppApp.swift; sourceTree = "<group>"; };
 		4391B02428112E53003165DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4391B02728112E53003165DB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4391B03028112F26003165DB /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 		4391B037281131B2003165DB /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
-		4391B0392811379C003165DB /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		4391B04528118C91003165DB /* ToDoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoView.swift; sourceTree = "<group>"; };
-		4391B04728118DE7003165DB /* TodoInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoInteractor.swift; sourceTree = "<group>"; };
 		4391B04928118FE6003165DB /* ToDoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCell.swift; sourceTree = "<group>"; };
 		4391B04F28119B60003165DB /* e_Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = e_Alert.swift; sourceTree = "<group>"; };
 		4391B0552811A46A003165DB /* e_Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = e_Color.swift; sourceTree = "<group>"; };
@@ -52,6 +54,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4382A58F28197E0800F18FC0 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				4382A58B28196FE500F18FC0 /* ToDoViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		4391B01428112E51003165DB = {
 			isa = PBXGroup;
 			children = (
@@ -72,10 +82,9 @@
 			isa = PBXGroup;
 			children = (
 				4391B02028112E51003165DB /* ToDoAppApp.swift */,
-				4391B0392811379C003165DB /* AppState.swift */,
 				4391B0362811319A003165DB /* API Service */,
 				4391B03228112FE1003165DB /* View */,
-				4391B03328113016003165DB /* Interactor */,
+				4382A58F28197E0800F18FC0 /* ViewModel */,
 				4391B0342811301F003165DB /* Repository */,
 				4391B02F28112F11003165DB /* Model */,
 				4391B04E28119B41003165DB /* Extensions */,
@@ -109,14 +118,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		4391B03328113016003165DB /* Interactor */ = {
-			isa = PBXGroup;
-			children = (
-				4391B04728118DE7003165DB /* TodoInteractor.swift */,
-			);
-			path = Interactor;
-			sourceTree = "<group>";
-		};
 		4391B0342811301F003165DB /* Repository */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +130,8 @@
 			isa = PBXGroup;
 			children = (
 				4391B037281131B2003165DB /* API.swift */,
+				4382A58D281970DA00F18FC0 /* ToDoGetResponse.swift */,
+				4382A5902819818600F18FC0 /* ToDoCreateResponse.swift */,
 			);
 			path = "API Service";
 			sourceTree = "<group>";
@@ -223,15 +226,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4391B04828118DE7003165DB /* TodoInteractor.swift in Sources */,
 				43650D0C2816D83E00A2CBAA /* ToDoViewHeader.swift in Sources */,
+				4382A5912819818600F18FC0 /* ToDoCreateResponse.swift in Sources */,
 				4391B05028119B60003165DB /* e_Alert.swift in Sources */,
-				4391B03A2811379C003165DB /* AppState.swift in Sources */,
+				4382A58E281970DA00F18FC0 /* ToDoGetResponse.swift in Sources */,
 				4391B03128112F26003165DB /* Todo.swift in Sources */,
 				4391B04628118C91003165DB /* ToDoView.swift in Sources */,
 				4391B02128112E51003165DB /* ToDoAppApp.swift in Sources */,
 				4391B0562811A46A003165DB /* e_Color.swift in Sources */,
 				4391B04A28118FE6003165DB /* ToDoCell.swift in Sources */,
+				4382A58C28196FE500F18FC0 /* ToDoViewModel.swift in Sources */,
 				4391B038281131B2003165DB /* API.swift in Sources */,
 				4364B79E2812E85E00B53400 /* TodoRepository.swift in Sources */,
 				4364B79828128D5600B53400 /* e_String.swift in Sources */,
