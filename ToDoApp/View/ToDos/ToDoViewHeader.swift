@@ -11,9 +11,10 @@ struct ToDoViewHeader: View {
     
     let interactor: TodoInteractor
     
+    @State var isShowingAllReadyDeletionWarning : Bool = false
+    
     let onTapAdd: () -> ()
     
-    @State var isShowingAllReadyDeletionWarning : Bool = false
     
     var body: some View {
         HStack {
@@ -48,12 +49,12 @@ struct ToDoViewHeader: View {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 32))
             }
-            .frame(width: 50, height: 50)
             .alert(isPresented: $isShowingAllReadyDeletionWarning) {
                 Alert.taskDeletion(title: "Do you want to delete all completed tasks?") {
                     interactor.deleteAllReady()
                 }
             }
+            .frame(width: 50, height: 50)
             Button {
                 onTapAdd()
             } label: {

@@ -30,17 +30,19 @@ class TodoRepository {
     func getTodos(page: Int, perPage: Int, status: Bool?, completion: @escaping (_ todos: [Todo]?, _ active: Int?, _ completed: Int?, _ error: Error?) -> Void) {
         let request = API.getTodosRequest(page: page, perPage: perPage, status: status)
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let data = jsonDict["data"] as? [String : Any],
-               let content = data["content"] as? [[String : Any]],
-               let ready = data["ready"] as? Int,
-               let notReady = data["notReady"] as? Int {
-                let todos = content.compactMap({Todo.init(from: $0)}).sorted(by: <)
-                completion(todos, notReady, ready, nil)
-            }
-            else if let error = error {
-                completion(nil, nil, nil, error)
+            DispatchQueue.main.async {
+                if let data = data,
+                   let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
+                   let data = jsonDict["data"] as? [String : Any],
+                   let content = data["content"] as? [[String : Any]],
+                   let ready = data["ready"] as? Int,
+                   let notReady = data["notReady"] as? Int {
+                    let todos = content.compactMap({Todo.init(from: $0)}).sorted(by: <)
+                    completion(todos, notReady, ready, nil)
+                }
+                else if let error = error {
+                    completion(nil, nil, nil, error)
+                }
             }
         }
         session.resume()
@@ -55,14 +57,16 @@ class TodoRepository {
     func createToDo(text: String, onSuccess: @escaping (Todo) -> (), onError: @escaping (Error) -> ()) {
         guard let request = API.createToDoRequest(text: text) else { return }
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
-               let todoData = jsonDict["data"] as? [String : Any],
-               let todo = Todo(from: todoData) {
-                onSuccess(todo)
-            }
-            else if let error = error {
-                onError(error)
+            DispatchQueue.main.async {
+                if let data = data,
+                   let jsonDict = try? JSONSerialization.jsonObject(with: data, options: []) as? [String : Any],
+                   let todoData = jsonDict["data"] as? [String : Any],
+                   let todo = Todo(from: todoData) {
+                    onSuccess(todo)
+                }
+                else if let error = error {
+                    onError(error)
+                }
             }
         }
         session.resume()

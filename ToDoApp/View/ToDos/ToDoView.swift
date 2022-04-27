@@ -14,8 +14,9 @@ struct ToDoView: View {
     
     @State var editingTodoID: Int?
     
-    @State var isShowingSingleDeletionWarning : Bool = false
     @State var todoIDtoDelete : Int?
+    
+    @State var isShowingSingleDeletionWarning : Bool = false
     
     var body: some View {
         VStack {
@@ -27,6 +28,9 @@ struct ToDoView: View {
             HStack {
                 Text("Active: \(appState.active), completed: \(appState.completed)")
                 Spacer()
+            }
+            .alert(item: $appState.error) { error in
+                Alert(title: Text(error))
             }
             .padding(.horizontal, 20)
             ScrollViewReader { proxy in
@@ -74,9 +78,6 @@ struct ToDoView: View {
                     interactor.deleteToDo(todoID: id)
                 }
             }
-        }
-        .alert(item: $appState.error) { error in
-            Alert(title: Text(error))
         }
     }
 }
