@@ -13,6 +13,8 @@ struct ToDoViewHeader: View {
     
     @State private var isShowingAllReadyDeletionWarning : Bool = false
     
+    @Binding var isEditing: Bool
+    
     let onTapAdd: () -> ()
     
     var body: some View {
@@ -64,12 +66,13 @@ struct ToDoViewHeader: View {
             .frame(width: 50, height: 50)
             
         }
+        .disabled(isEditing)
         .padding()
     }
 }
 
 struct ToDoViewHeader_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoViewHeader(viewModel: ToDoViewModel(), onTapAdd: {})
+        ToDoViewHeader(viewModel: ToDoViewModel(), isEditing: .constant(false), onTapAdd: {})
     }
 }

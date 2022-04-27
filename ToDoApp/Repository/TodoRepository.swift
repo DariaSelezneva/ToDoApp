@@ -31,6 +31,13 @@ class TodoRepository {
         session.resume()
     }
     
+//    func getTodos(page: Int, perPage: Int, status: Bool?) async throws -> ToDoGetResponse? {
+//        let request = API.getTodosRequest(page: page, perPage: perPage, status: status)
+//        let (data, _) = try await URLSession.shared.data(for: request)
+//        let decoder = JSONDecoder()
+//        return try decoder.decode(ToDoGetResponse.self, from: data)
+//    }
+    
     func getTodos(page: Int, perPage: Int, status: Bool?, onSuccess: @escaping (ToDoGetResponse) -> (), onError: @escaping (Error) -> ()) {
         let request = API.getTodosRequest(page: page, perPage: perPage, status: status)
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
