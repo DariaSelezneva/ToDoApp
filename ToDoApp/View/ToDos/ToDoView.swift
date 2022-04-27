@@ -21,9 +21,11 @@ struct ToDoView: View {
     var body: some View {
         VStack {
             ToDoViewHeader(interactor: interactor, onTapAdd: {
-                let todo = Todo(id: -1, text: "", isReady: false)
-                editingTodoID = -1
-                appState.todos.append(todo)
+                if editingTodoID == nil {
+                    let todo = Todo(id: -1, text: "", isReady: false)
+                    editingTodoID = -1
+                    appState.todos.append(todo)
+                }
             })
             HStack {
                 Text("Active: \(appState.active), completed: \(appState.completed)")
@@ -42,6 +44,9 @@ struct ToDoView: View {
                             interactor.saveToDo(todoID: todo.id, text: text)
                             editingTodoID = nil
                         }, onTapCancel: {
+                            if editingTodoID == -1 {
+                                appState.todos.removeLast()
+                            }
                             editingTodoID = nil
                         })
                         .onAppear {

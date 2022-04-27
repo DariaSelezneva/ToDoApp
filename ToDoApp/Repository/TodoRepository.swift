@@ -48,6 +48,7 @@ class TodoRepository {
         session.resume()
     }
     
+    
     func toggleToDo(todoID: Int, setReady: Bool, onSuccess: @escaping () -> (), onError: @escaping (Error) -> ()) {
         guard let request = API.toggleToDoRequest(todoID: todoID, setReady: setReady) else { return }
         startURLSession(request: request, onSuccess: onSuccess, onError: onError)

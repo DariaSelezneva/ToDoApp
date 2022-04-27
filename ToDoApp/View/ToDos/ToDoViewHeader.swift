@@ -15,7 +15,6 @@ struct ToDoViewHeader: View {
     
     let onTapAdd: () -> ()
     
-    
     var body: some View {
         HStack {
             Menu {
