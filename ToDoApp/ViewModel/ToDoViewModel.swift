@@ -189,6 +189,8 @@ class ToDoViewModel: ObservableObject {
             loadingState = .success
             todos = todos.filter({ !$0.isReady })
             completed = 0
+            page = 1
+            getTodos()
         }, onError: onError(_:))
     }
     
