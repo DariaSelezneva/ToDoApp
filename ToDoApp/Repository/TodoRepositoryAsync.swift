@@ -26,7 +26,7 @@ class TodoRepositoryAsync {
     
     func toggleTodo(todoID: Int, setReady: Bool) async throws {
         guard let request = API.toggleToDoRequest(todoID: todoID, setReady: setReady) else { throw NetworkError.badURL }
-        try await result(of: request)
+        try await perform(request)
     }
     
     func createToDo(text: String) async throws -> Todo {
@@ -37,25 +37,25 @@ class TodoRepositoryAsync {
     
     func saveToDo(todoID: Int, text: String) async throws {
         guard let request = API.saveToDoRequest(todoID: todoID, text: text) else { throw NetworkError.badURL }
-        return try await result(of: request)
+        return try await perform(request)
     }
     
     func deleteToDo(todoID: Int) async throws {
         let request = API.deleteToDoRequest(todoID: todoID)
-        try await result(of: request)
+        try await perform(request)
     }
     
     func setStatusToAll(setReady: Bool) async throws {
         guard let request = API.setStatusToAllRequest(setReady: setReady) else { throw NetworkError.badURL }
-        try await result(of: request)
+        try await perform(request)
     }
     
     func deleteAllReady() async throws {
         let request = API.deleteAllReadyRequest()
-        try await result(of: request)
+        try await perform(request)
     }
     
-    private func result(of request: URLRequest) async throws {
+    private func perform(_ request: URLRequest) async throws {
         let (data, _) = try await URLSession.shared.data(for: request)
         let response = try decoder.decode(ToDoSuccessResponse.self, from: data)
         if !response.success { throw NetworkError.incorrectRequest }
