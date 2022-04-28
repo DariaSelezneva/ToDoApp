@@ -25,6 +25,7 @@
 		43A2D771281AAC7C0075DA88 /* TodoRepositoryAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2D770281AAC7C0075DA88 /* TodoRepositoryAsync.swift */; };
 		43A2D773281AB3930075DA88 /* ToDoSuccessResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2D772281AB3930075DA88 /* ToDoSuccessResponse.swift */; };
 		43A2D775281AB4860075DA88 /* ToDoViewModelAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2D774281AB4860075DA88 /* ToDoViewModelAsync.swift */; };
+		43A2D777281AC6060075DA88 /* ToDoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A2D776281AC6060075DA88 /* ToDoList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		43A2D770281AAC7C0075DA88 /* TodoRepositoryAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRepositoryAsync.swift; sourceTree = "<group>"; };
 		43A2D772281AB3930075DA88 /* ToDoSuccessResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoSuccessResponse.swift; sourceTree = "<group>"; };
 		43A2D774281AB4860075DA88 /* ToDoViewModelAsync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewModelAsync.swift; sourceTree = "<group>"; };
+		43A2D776281AC6060075DA88 /* ToDoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 			children = (
 				4391B04528118C91003165DB /* ToDoView.swift */,
 				43650D0B2816D83E00A2CBAA /* ToDoViewHeader.swift */,
+				43A2D776281AC6060075DA88 /* ToDoList.swift */,
 				4391B04928118FE6003165DB /* ToDoCell.swift */,
 			);
 			path = ToDos;
@@ -237,6 +240,7 @@
 			files = (
 				43650D0C2816D83E00A2CBAA /* ToDoViewHeader.swift in Sources */,
 				43A2D773281AB3930075DA88 /* ToDoSuccessResponse.swift in Sources */,
+				43A2D777281AC6060075DA88 /* ToDoList.swift in Sources */,
 				4382A5912819818600F18FC0 /* ToDoCreateResponse.swift in Sources */,
 				43A2D775281AB4860075DA88 /* ToDoViewModelAsync.swift in Sources */,
 				4391B05028119B60003165DB /* e_Alert.swift in Sources */,

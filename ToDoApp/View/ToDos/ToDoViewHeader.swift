@@ -64,7 +64,6 @@ struct ToDoViewHeader: View {
                     .font(.system(size: 32))
             }
             .frame(width: 50, height: 50)
-            
         }
         .disabled(isEditing)
         .padding()
