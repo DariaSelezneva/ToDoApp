@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ToDoViewHeader: View {
     
-    let viewModel: ToDoViewModel
+    let viewModel: ToDoViewModelAsync
     
     @State private var isShowingAllReadyDeletionWarning : Bool = false
     
@@ -73,6 +73,6 @@ struct ToDoViewHeader: View {
 
 struct ToDoViewHeader_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoViewHeader(viewModel: ToDoViewModel(), isEditing: .constant(false), onTapAdd: {})
+        ToDoViewHeader(viewModel: ToDoViewModelAsync(), isEditing: .constant(false), onTapAdd: {})
     }
 }

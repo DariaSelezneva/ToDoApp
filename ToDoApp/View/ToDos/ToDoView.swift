@@ -9,7 +9,11 @@ import SwiftUI
 
 struct ToDoView: View {
     
-    @StateObject var viewModel : ToDoViewModel = ToDoViewModel()
+    @ObservedObject var viewModel: ToDoViewModelAsync
+    
+    init(viewModel: ToDoViewModelAsync) {
+        self.viewModel = viewModel
+    }
     
     @State private var isEditing: Bool = false
     @State private var editingTodoID: Int?
@@ -30,6 +34,13 @@ struct ToDoView: View {
                 HStack {
                     Text("Active: \(viewModel.active), completed: \(viewModel.completed)")
                     Spacer()
+                    Button {
+                        viewModel.refresh()
+                    } label: {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .font(.system(size: 24))
+                            .frame(width: 40, height: 40)
+                    }
                 }
                 .alert(item: $viewModel.error) { error in
                     Alert(title: Text(error))
@@ -96,6 +107,6 @@ struct ToDoView: View {
 
 struct ToDoView_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoView()
+        ToDoView(viewModel: ToDoViewModelAsync.shared)
     }
 }

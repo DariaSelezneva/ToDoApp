@@ -8,9 +8,6 @@
 import Foundation
 import Combine
 
-protocol ToDoRepositoryLogic {
-    
-}
 
 class TodoRepository {
     

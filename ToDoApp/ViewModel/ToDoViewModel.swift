@@ -8,19 +8,18 @@
 
 import Foundation
 
+enum LoadingState {
+    case idle
+    case loading
+    case success
+    case error
+}
 
 class ToDoViewModel: ObservableObject {
     
     let repository: TodoRepository = TodoRepository()
     
     // MARK: - Loading state
-    
-    enum LoadingState {
-        case idle
-        case loading
-        case success
-        case error
-    }
     
     @Published var loadingState : LoadingState = .idle
     

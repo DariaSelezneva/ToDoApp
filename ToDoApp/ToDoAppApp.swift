@@ -12,7 +12,7 @@ struct ToDoAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ToDoView()
+            ToDoView(viewModel: ToDoViewModelAsync.shared)
         }
     }
 }
