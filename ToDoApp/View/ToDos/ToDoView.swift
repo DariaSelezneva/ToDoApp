@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ToDoView: View {
     
-    @ObservedObject var viewModel : ToDoViewModel = ToDoViewModel()
+    @StateObject var viewModel : ToDoViewModel = ToDoViewModel()
     
     @State private var isEditing: Bool = false
     @State private var editingTodoID: Int?

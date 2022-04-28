@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 class ToDoViewModel: ObservableObject {
     
     let repository: TodoRepository = TodoRepository()
@@ -195,7 +196,7 @@ class ToDoViewModel: ObservableObject {
     }
     
     
-    func onError(_ error: Error?) {
+    private func onError(_ error: Error?) {
         loadingState = .error
         self.error = error?.localizedDescription ?? "Unknown error"
     }

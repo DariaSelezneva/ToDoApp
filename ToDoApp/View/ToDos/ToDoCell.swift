@@ -58,6 +58,7 @@ struct ToDoCell: View {
         else {
             HStack {
                 Text(todo.text)
+                    .strikethrough(todo.isReady)
                 Spacer()
                 Button {
                     onTapChecked()
@@ -67,6 +68,7 @@ struct ToDoCell: View {
                         .font(.system(size: 32))
                         .padding(.vertical)
                 }
+                .scaleEffect(todo.isReady ? 1.1 : 1.0)
             }
         }
     }
