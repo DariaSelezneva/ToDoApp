@@ -17,6 +17,7 @@ struct ToDoView: View {
     
     @State private var isEditing: Bool = false
     @State private var editingTodoID: Int?
+    @State var changedText: String = ""
     
     var body: some View {
         ZStack {
@@ -40,7 +41,7 @@ struct ToDoView: View {
                     Alert(title: Text(error))
                 }
                 .padding(.horizontal, 20)
-                ToDoList(viewModel: viewModel, isEditing: $isEditing, editingTodoID: $editingTodoID)
+                ToDoList(viewModel: viewModel, isEditing: $isEditing, editingTodoID: $editingTodoID, changedText: $changedText)
             }
             if viewModel.loadingState == .loading {
                 ProgressView()
@@ -52,6 +53,7 @@ struct ToDoView: View {
         let todo = Todo(id: -1, text: "", isReady: false)
         isEditing = true
         editingTodoID = -1
+        changedText = ""
         viewModel.todos.append(todo)
     }
 }

@@ -163,6 +163,7 @@ class ToDoViewModelAsync : ObservableObject {
                     active += 1
                     completed -= 1
                 }
+                refresh()
             }
             catch { self.error = error.localizedDescription }
         }

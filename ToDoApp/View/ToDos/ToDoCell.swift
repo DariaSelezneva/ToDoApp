@@ -12,7 +12,7 @@ struct ToDoCell: View {
     let todo : Todo
     
     let isEditing: Bool
-    @State private var changedText: String = ""
+    @Binding var changedText: String
     
     @State private var showsValidationWarning : Bool = false
     
@@ -20,14 +20,14 @@ struct ToDoCell: View {
     let onTapSave: (String) -> ()
     let onTapCancel: () -> ()
     
-    init(todo: Todo, isEditing: Bool, onTapChecked: @escaping () -> (), onTapSave: @escaping (String) -> (), onTapCancel: @escaping () -> ()) {
-        self.todo = todo
-        self.isEditing = isEditing
-        self.changedText = todo.text
-        self.onTapChecked = onTapChecked
-        self.onTapSave = onTapSave
-        self.onTapCancel = onTapCancel
-    }
+//    init(todo: Todo, isEditing: Bool, changedText: Binding<String>, onTapChecked: @escaping () -> (), onTapSave: @escaping (String) -> (), onTapCancel: @escaping () -> ()) {
+//        print("isEditing: \(isEditing), todo: \(todo)")
+//        self.todo = todo
+//        self.isEditing = isEditing
+//        self.onTapChecked = onTapChecked
+//        self.onTapSave = onTapSave
+//        self.onTapCancel = onTapCancel
+//    }
     
     var body: some View {
         if isEditing {
@@ -40,7 +40,7 @@ struct ToDoCell: View {
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color.appLightGray))
                 HStack {
                     Button("Cancel") {
-                        changedText = todo.text
+//                        changedText = todo.text
                         onTapCancel()
                     }
                     .frame(maxWidth: .infinity)
@@ -86,7 +86,7 @@ struct ToDoCell: View {
 
 struct ToDoCell_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoCell(todo: Todo.sample[0], isEditing: true, onTapChecked: {}, onTapSave: {_ in }, onTapCancel: {})
+        ToDoCell(todo: Todo.sample[0], isEditing: true, changedText: .constant(""), onTapChecked: {}, onTapSave: {_ in }, onTapCancel: {})
             .previewLayout(.sizeThatFits)
     }
 }

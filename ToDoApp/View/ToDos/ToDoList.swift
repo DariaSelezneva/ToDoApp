@@ -13,6 +13,7 @@ struct ToDoList: View {
     
     @Binding var isEditing: Bool
     @Binding var editingTodoID: Int?
+    @Binding var changedText: String
     
     @State var todoIDtoDelete : Int?
     
@@ -22,7 +23,7 @@ struct ToDoList: View {
         ScrollViewReader { proxy in
             List {
                 ForEach(Array(zip(viewModel.todos.indices, viewModel.todos)), id: \.0) { index, todo in
-                    ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, onTapChecked: {
+                    ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, changedText: $changedText, onTapChecked: {
                         viewModel.toggleToDo(todoID: todo.id)
                     }, onTapSave: { text in
                         save(todoID: todo.id, text: text)
@@ -45,6 +46,7 @@ struct ToDoList: View {
                             Button {
                                 isEditing = true
                                 editingTodoID = todo.id
+                                changedText = todo.text
                             } label : {
                                 Image(systemName: "pencil")
                             }
@@ -70,6 +72,7 @@ struct ToDoList: View {
         viewModel.saveToDo(todoID: todoID, text: text)
         isEditing = false
         editingTodoID = nil
+        changedText = ""
     }
     
     private func cancelEditing() {
@@ -78,11 +81,12 @@ struct ToDoList: View {
         }
         isEditing = false
         editingTodoID = nil
+        changedText = ""
     }
 }
 
 struct ToDoList_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoList(viewModel: ToDoViewModelAsync.shared, isEditing: .constant(false), editingTodoID: .constant(nil))
+        ToDoList(viewModel: ToDoViewModelAsync.shared, isEditing: .constant(false), editingTodoID: .constant(nil), changedText: .constant(""))
     }
 }
