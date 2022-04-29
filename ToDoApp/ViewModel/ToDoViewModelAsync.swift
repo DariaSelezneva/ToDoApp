@@ -10,8 +10,6 @@ import Foundation
 @MainActor
 class ToDoViewModelAsync : ObservableObject {
     
-    static let shared = ToDoViewModelAsync()
-    
     let repository = TodoRepositoryAsync()
     
     // MARK: - Loading state

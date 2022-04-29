@@ -87,6 +87,6 @@ struct ToDoList: View {
 
 struct ToDoList_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoList(viewModel: ToDoViewModelAsync.shared, isEditing: .constant(false), editingTodoID: .constant(nil), changedText: .constant(""))
+        ToDoList(viewModel: ToDoViewModelAsync(), isEditing: .constant(false), editingTodoID: .constant(nil), changedText: .constant(""))
     }
 }

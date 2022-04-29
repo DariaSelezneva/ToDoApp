@@ -9,10 +9,10 @@ import SwiftUI
 
 struct ToDoView: View {
     
-    @ObservedObject var viewModel: ToDoViewModelAsync
+    @StateObject var viewModel: ToDoViewModelAsync
     
-    init(viewModel: ToDoViewModelAsync) {
-        self.viewModel = viewModel
+    init() {
+        self._viewModel = StateObject(wrappedValue: ToDoViewModelAsync())
     }
     
     @State private var isEditing: Bool = false
@@ -60,6 +60,6 @@ struct ToDoView: View {
 
 struct ToDoView_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoView(viewModel: ToDoViewModelAsync.shared)
+        ToDoView()
     }
 }
