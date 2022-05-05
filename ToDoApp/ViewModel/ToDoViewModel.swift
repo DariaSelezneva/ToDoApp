@@ -123,6 +123,9 @@ class ToDoViewModel: ObservableObject {
                 let count = todos.count
                 todos[count - 1] = todo
                 active += 1
+                if selectedFilter == .completed {
+                    refresh()
+                }
             }, onError: onError(_:))
         }
         else {

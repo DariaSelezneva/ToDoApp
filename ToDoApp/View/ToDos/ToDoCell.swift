@@ -9,9 +9,12 @@ import SwiftUI
 
 struct ToDoCell: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     let todo : Todo
     
     let isEditing: Bool
+    let isCheckEnabled: Bool
     @Binding var changedText: String
     
     @State private var showsValidationWarning : Bool = false
@@ -19,15 +22,6 @@ struct ToDoCell: View {
     let onTapChecked: () -> ()
     let onTapSave: (String) -> ()
     let onTapCancel: () -> ()
-    
-//    init(todo: Todo, isEditing: Bool, changedText: Binding<String>, onTapChecked: @escaping () -> (), onTapSave: @escaping (String) -> (), onTapCancel: @escaping () -> ()) {
-//        print("isEditing: \(isEditing), todo: \(todo)")
-//        self.todo = todo
-//        self.isEditing = isEditing
-//        self.onTapChecked = onTapChecked
-//        self.onTapSave = onTapSave
-//        self.onTapCancel = onTapCancel
-//    }
     
     var body: some View {
         if isEditing {
@@ -37,10 +31,9 @@ struct ToDoCell: View {
                 })
                     .frame(height: 50)
                     .padding(.horizontal)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.appLightGray))
+                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.appLightGray.opacity(colorScheme == .light ? 1.0 : 0.2)))
                 HStack {
                     Button("Cancel") {
-//                        changedText = todo.text
                         onTapCancel()
                     }
                     .frame(maxWidth: .infinity)
@@ -68,6 +61,7 @@ struct ToDoCell: View {
                         .font(.system(size: 32))
                         .padding(.vertical)
                 }
+                .disabled(!isCheckEnabled)
                 .scaleEffect(todo.isReady ? 1.1 : 1.0)
             }
         }
@@ -86,7 +80,7 @@ struct ToDoCell: View {
 
 struct ToDoCell_Previews: PreviewProvider {
     static var previews: some View {
-        ToDoCell(todo: Todo.sample[0], isEditing: true, changedText: .constant(""), onTapChecked: {}, onTapSave: {_ in }, onTapCancel: {})
+        ToDoCell(todo: Todo.sample[0], isEditing: true, isCheckEnabled: true, changedText: .constant(""), onTapChecked: {}, onTapSave: {_ in }, onTapCancel: {})
             .previewLayout(.sizeThatFits)
     }
 }

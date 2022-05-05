@@ -23,7 +23,12 @@ struct ToDoList: View {
         ScrollViewReader { proxy in
             List {
                 ForEach(Array(zip(viewModel.todos.indices, viewModel.todos)), id: \.0) { index, todo in
-                    ToDoCell(todo: todo, isEditing: todo.id == editingTodoID, changedText: $changedText, onTapChecked: {
+                    ToDoCell(
+                        todo: todo,
+                        isEditing: todo.id == editingTodoID,
+                        isCheckEnabled: editingTodoID == nil,
+                        changedText: $changedText,
+                        onTapChecked: {
                         viewModel.toggleToDo(todoID: todo.id)
                     }, onTapSave: { text in
                         save(todoID: todo.id, text: text)

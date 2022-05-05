@@ -128,6 +128,9 @@ class ToDoViewModelAsync : ObservableObject {
                     let count = todos.count
                     todos[count - 1] = todo
                     active += 1
+                    if selectedFilter == .completed {
+                        refresh()
+                    }
                 }
                 catch { self.error = error.localizedDescription }
             }
