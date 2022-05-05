@@ -108,9 +108,7 @@ class ToDoViewModelAsync : ObservableObject {
         Task {
             do {
                 let response = try await repository.getTodos(page: page, perPage: perPage, status: status)
-                var newTodos = todos
-                newTodos.append(contentsOf: response.todos)
-                todos = newTodos.sorted(by: <)
+                todos.append(contentsOf: response.todos)
             }
             catch { self.error = error.localizedDescription }
         }
