@@ -25,8 +25,17 @@ struct ToDoView: View {
                 ToDoViewHeader(viewModel: viewModel, isEditing: $isEditing, onTapAdd: {
                     addTodo()
                 })
-                HStack {
-                    Text("Active: \(viewModel.active), completed: \(viewModel.completed)")
+                HStack(spacing: 20) {
+                    Button {
+                        viewModel.showsActive.toggle()
+                    } label: {
+                        Label("Active (\(viewModel.active))", systemImage: viewModel.showsActive ? "checkmark.square" : "square")
+                    }
+                    Button {
+                        viewModel.showsCompleted.toggle()
+                    } label: {
+                        Label("Completed (\(viewModel.completed))", systemImage: viewModel.showsCompleted ? "checkmark.square" : "square")
+                    }
                     Spacer()
                     Button {
                         viewModel.refresh()

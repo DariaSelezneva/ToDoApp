@@ -92,7 +92,7 @@ class ToDoViewModelAsync : ObservableObject {
         Task {
             do {
                 let response = try await repository.getTodos(page: page, perPage: perPage, status: status)
-                todos = response.todos
+                todos = response.todos.sorted(by: <)
                 active = response.active
                 completed = response.completed
             }
@@ -108,7 +108,9 @@ class ToDoViewModelAsync : ObservableObject {
         Task {
             do {
                 let response = try await repository.getTodos(page: page, perPage: perPage, status: status)
-                todos.append(contentsOf: response.todos)
+                var newTodos = todos
+                newTodos.append(contentsOf: response.todos)
+                todos = newTodos.sorted(by: <)
             }
             catch { self.error = error.localizedDescription }
         }
@@ -164,7 +166,7 @@ class ToDoViewModelAsync : ObservableObject {
                     active += 1
                     completed -= 1
                 }
-                refresh()
+//                refresh()
             }
             catch { self.error = error.localizedDescription }
         }

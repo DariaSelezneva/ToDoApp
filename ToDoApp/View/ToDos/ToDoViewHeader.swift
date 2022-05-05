@@ -19,22 +19,6 @@ struct ToDoViewHeader: View {
     
     var body: some View {
         HStack {
-            Menu {
-                Button {
-                    viewModel.showsActive.toggle()
-                } label: {
-                    Label("Active", systemImage: viewModel.showsActive ? "checkmark" : "")
-                }
-                Button {
-                    viewModel.showsCompleted.toggle()
-                } label: {
-                    Label("Completed", systemImage: viewModel.showsCompleted ? "checkmark" : "")
-                }
-            } label: {
-                Image(systemName: "line.3.horizontal.decrease.circle")
-                    .font(.system(size: 32))
-            }
-            .frame(width: 50, height: 50)
             Spacer()
             Menu {
                 Button("Mark all as completed") {

@@ -91,7 +91,7 @@ class ToDoViewModel: ObservableObject {
         loadingState = .loading
         repository.getTodos(page: page, perPage: perPage, status: status, onSuccess: { [unowned self] getResponse in
             loadingState = .success
-            todos = getResponse.todos
+            todos = getResponse.todos.sorted(by: <)
             active = getResponse.active
             completed = getResponse.completed
         }, onError: onError(_:))
@@ -104,7 +104,9 @@ class ToDoViewModel: ObservableObject {
             guard selectedFilter != .nothing else { todos = []; return }
             repository.getTodos(page: page, perPage: perPage, status: status, onSuccess: { [unowned self] getResponse in
                 loadingState = .success
+                var newTodos = todos
                 todos.append(contentsOf: getResponse.todos)
+                todos = newTodos.sorted(by: <)
             }, onError: onError(_:))
         }
     }
