@@ -18,6 +18,7 @@ struct ToDoCell: View {
     @Binding var changedText: String
     
     @State private var showsValidationWarning : Bool = false
+    @State private var validationWarning : String = ""
     
     let onTapChecked: () -> ()
     let onTapSave: (String) -> ()
@@ -43,7 +44,7 @@ struct ToDoCell: View {
                     }
                     .frame(maxWidth: .infinity)
                     .buttonStyle(.borderedProminent)
-                    .alert("Invalid input", isPresented: $showsValidationWarning) {}
+                    .alert(validationWarning, isPresented: $showsValidationWarning) {}
                 }
                 .padding(.all, 5)
             }
@@ -70,11 +71,21 @@ struct ToDoCell: View {
     func validateAndSave() {
         let text = changedText.withoutExtraSpaces()
         changedText = text
-        guard !text.isEmpty, text.count > 3, text.count < 160 else {
+        if text.isEmpty {
+            validationWarning = "Can not save an empty todo"
             showsValidationWarning = true
-            return
         }
-        onTapSave(text)
+        else if text.count < 3 {
+            validationWarning = "Too short title (4 characters min)"
+            showsValidationWarning = true
+        }
+        else if text.count > 160 {
+            validationWarning = "Too long title (160 characters max)"
+            showsValidationWarning = true
+        }
+        else {
+            onTapSave(text)
+        }
     }
 }
 

@@ -105,7 +105,7 @@ class ToDoViewModel: ObservableObject {
             repository.getTodos(page: page, perPage: perPage, status: status, onSuccess: { [unowned self] getResponse in
                 loadingState = .success
                 var newTodos = todos
-                todos.append(contentsOf: getResponse.todos)
+                newTodos.append(contentsOf: getResponse.todos)
                 todos = newTodos.sorted(by: <)
             }, onError: onError(_:))
         }
@@ -150,10 +150,16 @@ class ToDoViewModel: ObservableObject {
             if setReady {
                 active -= 1
                 completed += 1
+                if selectedFilter == .active {
+                    todos.remove(at: index)
+                }
             }
             else {
                 active += 1
                 completed -= 1
+                if selectedFilter == .completed {
+                    todos.remove(at: index)
+                }
             }
         }, onError: onError(_:))
     }

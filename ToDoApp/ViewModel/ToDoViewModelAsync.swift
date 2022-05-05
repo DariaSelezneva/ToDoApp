@@ -161,12 +161,21 @@ class ToDoViewModelAsync : ObservableObject {
                 if setReady {
                     active -= 1
                     completed += 1
+                    if selectedFilter == .active {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            self.todos.remove(at: index)
+                        }
+                    }
                 }
                 else {
                     active += 1
                     completed -= 1
+                    if selectedFilter == .completed {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            self.todos.remove(at: index)
+                        }
+                    }
                 }
-//                refresh()
             }
             catch { self.error = error.localizedDescription }
         }
